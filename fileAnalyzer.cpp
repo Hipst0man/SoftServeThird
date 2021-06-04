@@ -1,7 +1,4 @@
 #include "fileAnalyzer.h"
-#include <ctime>
-#include <regex>
-#include <thread>
 
 
 void fileAnalyzer::parse(const std::string filePath)

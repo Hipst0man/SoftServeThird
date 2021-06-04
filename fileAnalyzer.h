@@ -3,6 +3,9 @@
 #include <iostream>
 #include <vector>
 #include <atomic>
+#include <ctime>
+#include <regex>
+#include <thread>
 
 namespace fs = std::filesystem;
 
