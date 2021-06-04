@@ -13,7 +13,7 @@ class fileAnalyzer
 {
 private:
     std::string dirName;
-    std::atomic<int> processedFilesCount = 0;
+    std::atomic<int> processedFilesCount  = 0;
     std::atomic<int> totalLines           = 0;
     std::atomic<int> blankLines           = 0;
     std::atomic<int> commentLines         = 0;
