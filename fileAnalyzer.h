@@ -9,7 +9,7 @@
 
 namespace fs = std::filesystem;
 
-class fileAnalyzer
+class FileAnalyzer
 {
 private:
     std::string dirName;
@@ -19,11 +19,11 @@ private:
     std::atomic<int> commentLines         = 0;
     std::atomic<int> codeLines            = 0;
 
-    void parse(const std::string filePath);
+    bool parse(const std::string& filePath);
 
 public:
-    fileAnalyzer(std::string dir) : dirName(dir) {}
+    FileAnalyzer(std::string dir) : dirName(dir) {}
     void analyze();
-    void changeDirName(const std::string newDir);
+    void changeDirName(const std::string& newDir);
 };
 
