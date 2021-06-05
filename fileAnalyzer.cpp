@@ -1,10 +1,10 @@
 #include "fileAnalyzer.h"
 
 
-void fileAnalyzer::parse(const std::string filePath)
+bool FileAnalyzer::parse(const std::string& filePath)
 {
     std::ifstream fin(filePath, std::ios::binary);
-    if(!fin) return;
+    if(!fin) return false;
 
     std::regex comment {R"(\/\/)"};
     std::regex commentBlockEnd {R"((\*\/))"};
@@ -12,7 +12,7 @@ void fileAnalyzer::parse(const std::string filePath)
     std::regex codeBeforeCommentLine {R"(((\w|\s|[;,.=()<>"]|\]|\[)+//(\w|\s|[;,.=()<>"]|\]|\[)*))"};
     std::regex codeBeforeBlockComment {R"(((\w|\s|[;,.=()<>"]|\]|\[)+(\/\*)(\w|\s|[;,.=()<>"]|\]|\[)*))"};
     std::regex codeAfterBlockComment {R"(((\w|\s|[;,.=()<>"]|\]|\[)*(\*\/)(\w|\s|[;,.=()<>"]|\]|\[)+))"};
-    std::regex commentsInQuote {R"((")(\w|\s|[/]|[(\/\*)])*(")(\w|\s|[;,.=()<>]|\]|\[)*)"};
+    std::regex commentsInQuote {R"((\w|\s|[;,.=()<>]|\]|\[)*(")(\w|\s|[/]|[(\/\*)])*(")(\w|\s|[;,.=()<>]|\]|\[)*)"};
     std::regex blankLine {R"(^$|^(\s)*$)"};
 
     bool isBlockComment = false;
@@ -78,17 +78,18 @@ void fileAnalyzer::parse(const std::string filePath)
     }
     
     fin.close();
+    return true;
 }
 
 
-void fileAnalyzer::analyze()
+void FileAnalyzer::analyze()
 {
     std::vector<std::string> files;
     std::vector<std::thread> threads;
-    const std::string cPlusHeader = ".h";
-    const std::string cHeader = ".hpp"; 
-    const std::string cPlusSource = ".cpp"; 
-    const std::string cSource = ".c"; 
+    const std::string cPlusHeader       = ".h";
+    const std::string cHeader           = ".hpp"; 
+    const std::string cPlusSource       = ".cpp"; 
+    const std::string cSource           = ".c"; 
 
     for (const auto& p : fs::recursive_directory_iterator(dirName))
     {
@@ -105,7 +106,7 @@ void fileAnalyzer::analyze()
 
     for(const auto& el : files)
     {
-        threads.emplace_back(std::thread(&fileAnalyzer::parse, this, el));
+        threads.emplace_back(std::thread(&FileAnalyzer::parse, this, el));
         processedFilesCount++;
     }
 
@@ -128,7 +129,7 @@ void fileAnalyzer::analyze()
     fout.close();
 }
 
-void fileAnalyzer::changeDirName(const std::string newDir)
+void FileAnalyzer::changeDirName(const std::string& newDir)
 {
     if(newDir.empty()) return;
     else 
