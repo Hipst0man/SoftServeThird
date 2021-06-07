@@ -23,7 +23,7 @@ private:
 
 public:
     FileAnalyzer(std::string dir) : dirName(dir) {}
-    void analyze();
-    void changeDirName(const std::string& newDir);
+    bool analyze();
+    bool changeDirName(const std::string& newDir);
 };
 
