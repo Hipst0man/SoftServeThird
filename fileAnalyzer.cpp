@@ -82,8 +82,10 @@ bool FileAnalyzer::parse(const std::string& filePath)
 }
 
 
-void FileAnalyzer::analyze()
+bool FileAnalyzer::analyze()
 {
+    if(!fs::exists(dirName)) return false;
+    
     std::vector<std::string> files;
     std::vector<std::thread> threads;
     const std::string cPlusHeader       = ".h";
@@ -101,6 +103,8 @@ void FileAnalyzer::analyze()
             }
         }
     }
+
+    if(files.empty()) return false;
 
     const unsigned int startTime =  clock();
 
@@ -127,14 +131,16 @@ void FileAnalyzer::analyze()
                 << "\nCode lines: " << codeLines.load() << "\nBlank lines: " << blankLines.load() 
                     << "\nTotal files: " << processedFilesCount.load() << "\nTime spent on parsing files: " << parseTime / 1000.0 << "\n";
     fout.close();
+    return true;
 }
 
-void FileAnalyzer::changeDirName(const std::string& newDir)
+bool FileAnalyzer::changeDirName(const std::string& newDir)
 {
-    if(newDir.empty()) return;
+    if(newDir.empty() || !fs::exists(newDir)) return false;
     else 
     {
         dirName = newDir;
+        return true;
     }   
 }
 
