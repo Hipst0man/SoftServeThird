@@ -143,5 +143,3 @@ bool FileAnalyzer::changeDirName(const std::string& newDir)
         return true;
     }   
 }
-
-
